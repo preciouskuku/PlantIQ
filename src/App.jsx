@@ -7,8 +7,8 @@ import Home from './pages/Home';
 import Library from './pages/Library';
 import News from './pages/News';
 import Company from './pages/Company';
-import Solutions from './pages/Solutions';
-import NotFound from './pages/NotFound';
+import Solutions from './pages/Solution';
+
 
 const App = () => {
   return (
@@ -20,7 +20,7 @@ const App = () => {
         <Route path="/news" element={<News />} />
         <Route path="/company" element={<Company />} />
         <Route path="/solutions" element={<Solutions />} />
-        <Route path="*" element={<NotFound />} />
+        
       </Routes>
     </Router>
   );
