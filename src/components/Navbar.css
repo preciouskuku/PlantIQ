@@ -1,0 +1,75 @@
+/* Reset link styles */
+.navbar a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.navbar a:hover {
+  color: #007bff;
+}
+
+.navbar a.active {
+  color: #007bff;
+  font-weight: 600;
+}
+
+/* Navbar container */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Left: Logo */
+.navbar-left {
+  display: flex;
+  align-items: center;
+  
+}
+
+.logo-icon {
+  color: #2e7d32;
+  font-size: 1.8rem;
+  margin-right: 0.5rem;
+}
+
+.logo-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2e7d32;
+}
+
+/* Center: Nav Links */
+.navbar-center {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.navbar-center a {
+  font-size: 1rem;
+}
+
+/* Right: Button */
+.navbar-right .get-app-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.navbar-right .get-app-btn:hover {
+  background-color: #0056b3;
+}

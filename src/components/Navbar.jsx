@@ -8,7 +8,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-left">
         <FaLeaf className="logo-icon" />
-        <h2 className="logo-text">AgroDetect</h2>
+        <h2 className="logo-text">PlantIQ</h2>
       </div>
       <div className="navbar-center">
         <NavLink to="/">App</NavLink>
