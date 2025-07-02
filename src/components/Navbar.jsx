@@ -2,12 +2,14 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import './Navbar.css';
 import { FaLeaf } from 'react-icons/fa';
+// import logo from '../assets/logo.jpg'; // Adjust the path as necessary
 
 const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-left">
         <FaLeaf className="logo-icon" />
+        {/* <img src= {logo} alt="logo" srcset="" /> */}
         <h2 className="logo-text">PlantIQ</h2>
       </div>
       <div className="navbar-center">
