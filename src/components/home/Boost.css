@@ -1,0 +1,49 @@
+.boost-section {
+  background-color: white;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.boost-heading {
+  font-size: 2rem;
+  color: black;
+  margin-bottom: 2rem;
+}
+
+.boost-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  max-width: 1150px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.boost-text {
+  flex: 1;
+  min-width: 250px;
+}
+
+.boost-text h3 {
+  font-size: 1.5rem;
+  color: #007b55;
+  margin-bottom: 1rem;
+}
+
+.boost-text p {
+  font-size: 1.1rem;
+  color: #444;
+}
+
+.boost-video {
+  flex: 1;
+  min-width: 300px;
+}
+
+.boost-video video {
+  width: 100%;
+  
+  
+}
