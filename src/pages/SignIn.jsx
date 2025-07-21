@@ -42,6 +42,10 @@ export default function SignIn() {
           <Input name="password" type="password" placeholder="Password" value={form.password} onChange={handleChange} required />
         </div>
         {errorMsg && <p className="text-red-500 text-sm mt-2 text-center">{errorMsg}</p>}
+        <p className="text-sm mt-2 text-center text-muted-foreground">
+  <Link to="/forgot-password" className="text-primary hover:underline">Forgot Password?</Link>
+</p>
+
         <Button type="submit" className="mt-6 w-full">Sign In</Button>
         <p className="text-sm mt-4 text-center text-muted-foreground">
           Don't have an account? <Link to="/signup" className="text-primary hover:underline">Sign Up</Link>
