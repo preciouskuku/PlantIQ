@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { supabase } from "../supabaseClient"; // adjust path if needed
+import { supabase } from "../supabaseClient";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -14,25 +14,36 @@ export default function SignUp() {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setErrorMsg("");
+    e.preventDefault();
+    setErrorMsg("");
 
-  const { data, error } = await supabase.auth.signUp({
-    email: form.email,
-    password: form.password,
-    options: {
-      data: { full_name: form.name },
-    },
-  });
+    const { data, error } = await supabase.auth.signUp({
+      email: form.email,
+      password: form.password,
+      options: {
+        data: { full_name: form.name },
+        emailRedirectTo: "http://localhost:5173", // or your dashboard page
+      },
+    });
 
-  if (error) {
-    setErrorMsg(error.message);
-  } else {
-    setErrorMsg("Check your inbox to confirm your email before signing in.");
-    // Don't navigate yet, user must verify email first
-  }
-};
+    if (error) {
+      setErrorMsg(error.message);
+    } else {
+      setErrorMsg("Check your inbox to confirm your email before signing in.");
+      // Don't navigate yet — wait for confirmation
+    }
+  };
 
+  // 🔁 Listen for sign-in after email confirmation
+  useEffect(() => {
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" && session) {
+        navigate("/dashboard"); // Redirect once signed in after email confirm
+      }
+    });
+
+    return () => listener.subscription.unsubscribe();
+  }, [navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
@@ -43,12 +54,4 @@ export default function SignUp() {
           <Input name="email" type="email" placeholder="Email" value={form.email} onChange={handleChange} required />
           <Input name="password" type="password" placeholder="Password" value={form.password} onChange={handleChange} required />
         </div>
-        {errorMsg && <p className="text-red-500 text-sm mt-2 text-center">{errorMsg}</p>}
-        <Button type="submit" className="mt-6 w-full">Sign Up</Button>
-        <p className="text-sm mt-4 text-center text-muted-foreground">
-          Already have an account? <Link to="/signin" className="text-primary hover:underline">Sign In</Link>
-        </p>
-      </form>
-    </div>
-  );
-}
+        {errorMsg && <p className="text-red-500 text-sm mt-2 text-ce
