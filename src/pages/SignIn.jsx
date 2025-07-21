@@ -2,20 +2,32 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { supabase } from "../supabaseClient"; // adjust path if needed
 
 export default function SignIn() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Add real authentication
-    console.log("Logging in:", form);
-    navigate("/dashboard/farmer");
+    setErrorMsg("");
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: form.email,
+      password: form.password,
+    });
+
+    if (error) {
+      setErrorMsg(error.message);
+    } else {
+      // Optional: Store session/user info if needed
+      navigate("/dashboard/farmer"); // redirect to your dashboard
+    }
   };
 
   return (
@@ -26,6 +38,7 @@ export default function SignIn() {
           <Input name="email" type="email" placeholder="Email" value={form.email} onChange={handleChange} required />
           <Input name="password" type="password" placeholder="Password" value={form.password} onChange={handleChange} required />
         </div>
+        {errorMsg && <p className="text-red-500 text-sm mt-2 text-center">{errorMsg}</p>}
         <Button type="submit" className="mt-6 w-full">Sign In</Button>
         <p className="text-sm mt-4 text-center text-muted-foreground">
           Don't have an account? <Link to="/signup" className="text-primary hover:underline">Sign Up</Link>
