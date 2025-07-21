@@ -13,22 +13,25 @@ export default function SignIn() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setErrorMsg("");
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setErrorMsg("");
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: form.email,
-      password: form.password,
-    });
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: form.email,
+    password: form.password,
+  });
 
-    if (error) {
-      setErrorMsg(error.message);
-    } else {
-      // Optional: Store session/user info if needed
-      navigate("/dashboard/farmer"); // redirect to your dashboard
-    }
-  };
+  if (error) {
+    setErrorMsg(error.message);
+  } else if (data.session) {
+    // User is truly logged in
+    navigate("/dashboard/farmer");
+  } else {
+    setErrorMsg("Login failed: No session returned");
+  }
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">

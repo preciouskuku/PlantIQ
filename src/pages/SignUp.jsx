@@ -14,25 +14,25 @@ export default function SignUp() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setErrorMsg("");
+  e.preventDefault();
+  setErrorMsg("");
 
-    const { data, error } = await supabase.auth.signUp({
-      email: form.email,
-      password: form.password,
-      options: {
-        data: {
-          full_name: form.name,
-        },
-      },
-    });
+  const { data, error } = await supabase.auth.signUp({
+    email: form.email,
+    password: form.password,
+    options: {
+      data: { full_name: form.name },
+    },
+  });
 
-    if (error) {
-      setErrorMsg(error.message);
-    } else {
-      navigate("/dashboard/farmer"); // or show "check your email" message
-    }
-  };
+  if (error) {
+    setErrorMsg(error.message);
+  } else {
+    setErrorMsg("Check your inbox to confirm your email before signing in.");
+    // Don't navigate yet, user must verify email first
+  }
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
