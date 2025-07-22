@@ -1,4 +1,3 @@
-// src/pages/ForgotPassword.jsx
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,12 +9,14 @@ export default function ForgotPassword() {
 
   const handleReset = async (e) => {
     e.preventDefault();
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: "http://localhost:5173/reset-password", // Update this for production
+    });
 
     if (error) {
       setMessage(`Error: ${error.message}`);
     } else {
-      setMessage("Password reset link sent! Check your inbox.");
+      setMessage("Reset link sent! Check your email.");
     }
   };
 

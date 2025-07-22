@@ -15,7 +15,9 @@ import Reports from "./pages/Reports";
 import NotFound from "./pages/NotFound";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import ForgotPassword from "./pages/ForgotPassword";
 import AdminDashboard from "./pages/AdminDashboard";
+import ResetPassword from "./pages/ResetPassword"
 
 // Components
 import { Navigation } from "./components/Navigation";
@@ -24,12 +26,12 @@ const queryClient = new QueryClient();
 
 const AppRoutes = () => {
   const location = useLocation();
-  const hideNavRoutes = ["/", "/signin", "/signup"];
+  const hideNavRoutes = ["/", "/signin", "/signup", "/forgot-password"]; 
 
   const showSidebar = !hideNavRoutes.includes(location.pathname);
 
   useEffect(() => {
-    window.scrollTo(0, 0); // Optional: auto-scroll to top on route change
+    window.scrollTo(0, 0);
   }, [location.pathname]);
 
   return (
@@ -40,6 +42,7 @@ const AppRoutes = () => {
           <Route path="/" element={<Index />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} /> {/* ✅ NEW */}
           <Route path="/dashboard/farmer" element={<Dashboard userRole="farmer" />} />
           <Route path="/dashboard/admin" element={<AdminDashboard />} />
           <Route path="/scan" element={<ScanCrop />} />
@@ -47,6 +50,7 @@ const AppRoutes = () => {
           <Route path="/community" element={<Community />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
         </Routes>
       </main>
     </div>
