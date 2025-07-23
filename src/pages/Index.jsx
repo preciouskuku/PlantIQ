@@ -278,7 +278,7 @@ export default function Index() {
           </div>
 
           <div className="border-t mt-8 pt-8 text-center text-sm text-muted-foreground">
-            <p>&copy; 2024 PlantIQ. All rights reserved. Empowering sustainable agriculture through technology.</p>
+            <p>&copy; 2025 PlantIQ. All rights reserved. Empowering sustainable agriculture through technology.</p>
           </div>
         </div>
       </footer>

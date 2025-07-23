@@ -42,7 +42,7 @@ const AppRoutes = () => {
           <Route path="/" element={<Index />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} /> {/* ✅ NEW */}
+          <Route path="/forgot-password" element={<ForgotPassword />} /> 
           <Route path="/dashboard/farmer" element={<Dashboard userRole="farmer" />} />
           <Route path="/dashboard/admin" element={<AdminDashboard />} />
           <Route path="/scan" element={<ScanCrop />} />
