@@ -1,6 +1,19 @@
 import { useState, useRef } from "react";
-import { Camera, Upload, X, Loader2, CheckCircle, AlertTriangle } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Camera,
+  Upload,
+  X,
+  Loader2,
+  CheckCircle,
+  AlertTriangle,
+} from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -42,66 +55,61 @@ export default function ScanCrop() {
     event.preventDefault();
   };
 
+  const getBase64FromDataUrl = (dataUrl) => {
+    return dataUrl.split(",")[1]; // Remove prefix "data:image/...;base64,"
+  };
+
   const analyzeImage = async () => {
     if (!selectedImage) return;
 
     setIsAnalyzing(true);
+    setAnalysisResult(null);
 
-    // Simulate AI analysis
-    setTimeout(() => {
-      const mockResults = [
-        {
-          disease: "Early Blight",
-          confidence: 94,
-          severity: "Moderate",
-          description:
-            "A common fungal disease affecting tomato and potato plants. Characterized by dark brown spots with concentric rings.",
-          organic_treatments: [
-            "Apply copper-based fungicides",
-            "Improve air circulation",
-            "Remove affected leaves",
-            "Use compost tea spray",
-          ],
-          chemical_treatments: [
-            "Chlorothalonil fungicide",
-            "Mancozeb application",
-            "Copper sulfate spray",
-            "Azoxystrobin treatment",
-          ],
-          prevention: [
-            "Crop rotation",
-            "Proper spacing between plants",
-            "Avoid overhead watering",
-            "Mulching around plants",
-          ],
-        },
-        {
-          disease: "Healthy Leaf",
-          confidence: 98,
-          severity: "None",
-          description:
-            "The leaf appears healthy with no signs of disease or pest damage. Continue monitoring for any changes.",
-          organic_treatments: [],
-          chemical_treatments: [],
-          prevention: [
-            "Regular inspection",
-            "Maintain proper nutrition",
-            "Adequate watering",
-            "Good air circulation",
-          ],
-        },
-      ];
+    try {
+      const base64 = getBase64FromDataUrl(selectedImage);
 
-      // Randomly select a result for demo
-      const randomResult = mockResults[Math.floor(Math.random() * mockResults.length)];
-      setAnalysisResult(randomResult);
-      setIsAnalyzing(false);
+      const response = await fetch("http://127.0.0.1:8000/predict-disease", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          accept: "application/json",
+        },
+        body: JSON.stringify({ image_base64: base64 }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Prediction API error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      // Map API response to UI data structure
+      const result = {
+        disease: data.prediction,
+        confidence: Math.round(data.confidence * 100),
+        severity: "Moderate", // Placeholder, customize as needed
+        description: data.suggestion,
+        organic_treatments: [], // You can fill in or fetch these separately
+        chemical_treatments: [],
+        prevention: [],
+      };
+
+      setAnalysisResult(result);
 
       toast({
         title: "Analysis Complete",
-        description: `Detected: ${randomResult.disease} with ${randomResult.confidence}% confidence`,
+        description: `Detected: ${result.disease} with ${result.confidence}% confidence`,
       });
-    }, 3000);
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to analyze image",
+        variant: "destructive",
+      });
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   const resetScan = () => {
@@ -113,9 +121,12 @@ export default function ScanCrop() {
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-foreground mb-2">Crop Disease Scanner</h1>
+        <h1 className="text-3xl font-bold text-foreground mb-2">
+          Crop Disease Scanner
+        </h1>
         <p className="text-muted-foreground">
-          Upload or capture an image of your crop to detect diseases and get treatment recommendations
+          Upload or capture an image of your crop to detect diseases and get
+          treatment recommendations
         </p>
       </div>
 
@@ -123,7 +134,9 @@ export default function ScanCrop() {
         <Card>
           <CardHeader>
             <CardTitle>Upload Crop Image</CardTitle>
-            <CardDescription>Take a photo or upload an image of the affected crop or leaf</CardDescription>
+            <CardDescription>
+              Take a photo or upload an image of the affected crop or leaf
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div
@@ -134,7 +147,9 @@ export default function ScanCrop() {
             >
               <Camera className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
               <h3 className="text-lg font-medium mb-2">Drop your image here</h3>
-              <p className="text-muted-foreground mb-4">or click to browse from your device</p>
+              <p className="text-muted-foreground mb-4">
+                or click to browse from your device
+              </p>
               <Button variant="outline">
                 <Upload className="mr-2 h-4 w-4" />
                 Choose Image
@@ -188,7 +203,9 @@ export default function ScanCrop() {
                   <Loader2 className="h-6 w-6 animate-spin text-primary" />
                   <div>
                     <p className="font-medium">Analyzing your crop...</p>
-                    <p className="text-sm text-muted-foreground">This may take a few moments</p>
+                    <p className="text-sm text-muted-foreground">
+                      This may take a few moments
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -208,7 +225,13 @@ export default function ScanCrop() {
                     )}
                     <span>Analysis Results</span>
                   </CardTitle>
-                  <Badge variant={analysisResult.disease === "Healthy Leaf" ? "default" : "destructive"}>
+                  <Badge
+                    variant={
+                      analysisResult.disease === "Healthy Leaf"
+                        ? "default"
+                        : "destructive"
+                    }
+                  >
                     {analysisResult.confidence}% Confidence
                   </Badge>
                 </div>
@@ -248,7 +271,9 @@ export default function ScanCrop() {
                         <Card>
                           <CardHeader>
                             <CardTitle className="text-lg">Organic Solutions</CardTitle>
-                            <CardDescription>Natural and eco-friendly treatment options</CardDescription>
+                            <CardDescription>
+                              Natural and eco-friendly treatment options
+                            </CardDescription>
                           </CardHeader>
                           <CardContent>
                             <ul className="space-y-2">
@@ -267,7 +292,9 @@ export default function ScanCrop() {
                         <Card>
                           <CardHeader>
                             <CardTitle className="text-lg">Chemical Solutions</CardTitle>
-                            <CardDescription>Fast-acting chemical treatments for severe cases</CardDescription>
+                            <CardDescription>
+                              Fast-acting chemical treatments for severe cases
+                            </CardDescription>
                           </CardHeader>
                           <CardContent>
                             <ul className="space-y-2">
