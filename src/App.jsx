@@ -11,6 +11,7 @@ import Dashboard from "./pages/Dashboard";
 import ScanCrop from "./pages/ScanCrop";
 import Weather from "./pages/Weather";
 import Community from "./pages/Community";
+import DiscussionDetail from "./pages/DiscussionDetail"; // New import
 import Reports from "./pages/Reports";
 import NotFound from "./pages/NotFound";
 import SignIn from "./pages/SignIn";
@@ -48,6 +49,7 @@ const AppRoutes = () => {
           <Route path="/scan" element={<ScanCrop />} />
           <Route path="/weather" element={<Weather />} />
           <Route path="/community" element={<Community />} />
+          <Route path="/community/:id" element={<DiscussionDetail />} /> {/* New route */}
           <Route path="/reports" element={<Reports />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
